@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+require 'rubygems'
+
+json_loaded = false
+json_load_error = nil
+begin
+  require 'json'
+  json_loaded = true
+rescue LoadError =&gt; e
+  json_load_error = e
+end
+
+SUPPORT = ENV['TM_BUNDLE_SUPPORT']
+
+html_head = &lt;&lt;HHTML
+&lt;!doctype&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;script type="text/javascript" src="file://#{SUPPORT}/jquery-1.3.2.min.js"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript" src="file://#{SUPPORT}/jquery-ui-1.7.2.custom.min.js"&gt;&lt;/script&gt;
+  &lt;style type="text/css"&gt;
+
+/* Layout helpers
+----------------------------------*/
+.ui-helper-hidden { display: none; }
+.ui-helper-hidden-accessible { position: absolute; left: -99999999px; }
+.ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
+/* end clearfix */
+.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-disabled { cursor: default !important; }
+
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Overlays */
+.ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+    p { margin-bottom: 0; }
+    body { margin: 0px; }
+    pre {
+      background: #f5f5f5;
+      border: 1px solid #cfcfcf;
+      font-size: 12px;
+      margin-top: 2px;
+      padding: 2px 4px;
+    }
+    code {
+      background: #f5f5f5;
+      border: 1px solid #cfcfcf;
+      padding: 2px 4px;
+    }
+    .filename {
+      padding-top: 8px;
+      font-size: 12px;
+    }
+    #logo {
+      background-color:gainsboro; 
+      padding: 12px;
+      border-bottom: 2px solid black;
+      font-size: 24px;
+    }
+    #content {
+      margin: 10px;
+    }
+    TABLE.function_details {
+      border: 1px solid gainsboro;
+    }
+    TABLE.function_details TD {
+      border: 1px solid gainsboro;
+      background-color: #f5f5f5;
+    }
+    TABLE.function_details TD CODE {
+      border: none;
+    }
+    /* Tabs
+----------------------------------*/
+.ui-tabs { padding: .2em; zoom: 1; }
+.ui-tabs .ui-tabs-nav { list-style: none; position: relative; padding: .2em .2em 0; }
+.ui-tabs .ui-tabs-nav li { position: relative; float: left; border-bottom-width: 0 !important; margin: 0 .2em -1px 0; padding: 0; }
+.ui-tabs .ui-tabs-nav li a { float: left; text-decoration: none; padding: .5em 1em; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected { padding-bottom: 1px; border-bottom-width: 0; border: 2px solid black; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; color: black; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-panel { padding: 1em 1.4em; display: block; border-width: 0; background: none; border: 2px solid black; overflow:auto;}
+.ui-tabs .ui-tabs-hide { display: none !important; }
+.ui-tabs .ui-state-default { border: 2px solid gainsboro;}
+  &lt;/style&gt;
+  &lt;script type="text/javascript"&gt;
+	$(function() {
+		$("#tabs").tabs({collapsible: false});
+	});
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+HHTML
+
+if json_loaded
+  raw_result = `/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc "#{SUPPORT}/jslint.js" -- "$(cat "$TM_FILEPATH")"`
+  #raw_result = `/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc "#{SUPPORT}/jslint.js" -- "$TM_SELECTED_TEXT"`
+  result = JSON::parse &lt;&lt;MYJSON
+#{raw_result}
+MYJSON
+
+  my_html = ""
+  my_tabs = ""
+
+  ########
+  # Errors
+  if result['data']['errors']
+    my_tabs &lt;&lt; "&lt;li&gt;&lt;a href=\"#tabs-1\"&gt;Errors&lt;/a&gt;&lt;/li&gt;"
+    my_html &lt;&lt; "&lt;div id=\"tabs-1\"&gt;"
+    if result['data']['errors'].last.nil?
+      my_html &lt;&lt; "&lt;h2 style=\"color: red;\"&gt;Errors: #{result['data']['errors'].size - 1} feelings hurt with fatal result!&lt;/h2&gt;"
+    else
+      my_html &lt;&lt; "&lt;h2 style=\"color: red;\"&gt;Errors: #{result['data']['errors'].size} feelings hurt!&lt;/h2&gt;"
+    end
+    result['data']['errors'].each_with_index do |error, index|
+      if !error.nil?
+        my_error = &lt;&lt;EHTML
+&lt;p&gt;
+  &lt;a href="txmt://open?url=file://#{ENV['TM_FILEPATH']}&amp;line=#{error['line']}&amp;column=#{error['character']}"&gt;
+    &lt;strong&gt;##{index + 1}: Line #{error['line']}, character: #{error['character']}&lt;/strong&gt;: #{error['reason']}
+  &lt;/a&gt;
+  &lt;pre&gt;#{error['evidence']}&lt;/pre&gt;
+&lt;/p&gt;
+EHTML
+        my_html &lt;&lt; my_error
+      end
+    end
+    my_html &lt;&lt; "&lt;/div&gt;"
+  else
+    my_tabs &lt;&lt; "&lt;li&gt;&lt;a href=\"#tabs-1\"&gt;Errors&lt;/a&gt;&lt;/li&gt;"
+    my_html &lt;&lt; "&lt;div id=\"tabs-1\"&gt;&lt;h2 style=\"color: green;\"&gt;Errors: None - Congratulations!&lt;/h2&gt;&lt;/div&gt;"
+  end
+
+  #########
+  # Globals
+  if result['data']['globals']
+    my_tabs &lt;&lt; "&lt;li&gt;&lt;a href=\"#tabs-2\"&gt;Globals&lt;/a&gt;&lt;/li&gt;"
+    my_html &lt;&lt; "&lt;div id=\"tabs-2\"&gt;&lt;h2&gt;Globals&lt;/h2&gt;"
+    my_html &lt;&lt; "&lt;p&gt;&lt;pre&gt;#{result['data']['globals'].join(', ')}&lt;/pre&gt;&lt;/p&gt;&lt;/div&gt;"
+  else
+
+  end
+
+  #########
+  # Unuseds
+  if result['data']['unuseds']
+    my_tabs &lt;&lt; "&lt;li&gt;&lt;a href=\"tabs-3\"&gt;Unuseds&lt;/a&gt;&lt;/li&gt;"
+    my_html &lt;&lt; "&lt;div id=\"tabs-3\"&gt;&lt;h2&gt;Unuseds&lt;/h2&gt;"
+    result['data']['unuseds'].each_with_index do |unused, index|
+      my_unused = &lt;&lt;UHTML
+&lt;p&gt;
+  &lt;a href="txmt://open?url=file://#{ENV['TM_FILEPATH']}&amp;line=#{unused['line']}"&gt;
+    &lt;strong&gt;#{unused['name']}&lt;/strong&gt;
+  &lt;/a&gt;
+&lt;/p&gt;
+UHTML
+      my_html &lt;&lt; my_unused
+    end
+    my_html &lt;&lt; "&lt;/div&gt;"
+  end
+
+  ###########
+  # Functions
+  if result['data']['functions']
+    my_tabs &lt;&lt; "&lt;li&gt;&lt;a href=\"#tabs-4\"&gt;Functions&lt;/a&gt;&lt;/li&gt;"
+    my_html &lt;&lt; "&lt;div id=\"tabs-4\"&gt;&lt;h2&gt;Functions&lt;/h2&gt;"
+    result['data']['functions'].each_with_index do |function, index|
+      my_details =  function['param'].nil?     ? "" : "&lt;tr&gt;&lt;td&gt;Params&lt;/td&gt;&lt;td&gt;&lt;code&gt;" + function['param'].join(", ")     + "&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;"
+      my_details += function['global'].nil?    ? "" : "&lt;tr&gt;&lt;td&gt;Used Globals&lt;/td&gt;&lt;td&gt;&lt;code&gt;" + function['global'].join(", ")    + "&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;"
+      my_details += function['outer'].nil?     ? "" : "&lt;tr&gt;&lt;td&gt;Outer references&lt;/td&gt;&lt;td&gt;&lt;code&gt;" + function['outer'].join(", ")     + "&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;"
+      my_details += function['var'].nil?       ? "" : "&lt;tr&gt;&lt;td&gt;Local variables&lt;/td&gt;&lt;td&gt;&lt;code&gt;" + function['var'].join(", ")       + "&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;"
+      my_details += function['closure'].nil?   ? "" : "&lt;tr&gt;&lt;td&gt;Closure members&lt;/td&gt;&lt;td&gt;&lt;code&gt;" + function['closure'].join(", ")   + "&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;"
+      my_details += function['unused'].nil?    ? "" : "&lt;tr&gt;&lt;td style=\"color: red; font-weight: 600;\"&gt;Unused variables&lt;/td&gt;&lt;td&gt;&lt;code&gt;" + function['unused'].join(", ") + "&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;"
+      my_details += function['exception'].nil? ? "" : "&lt;tr&gt;&lt;td&gt;Exceptions&lt;/td&gt;&lt;td&gt;&lt;code&gt;" + function['exception'].join(", ") + "&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;"
+      my_function = &lt;&lt;FHTML
+&lt;p&gt;
+  &lt;a href="txmt://open?url=file://#{ENV['TM_FILEPATH']}&amp;line=#{function['line']}"&gt;
+    &lt;strong&gt;#{function['name']}&lt;/strong&gt;
+  &lt;/a&gt;
+  &lt;table cellspacing="0" class="function_details"&gt;#{my_details}&lt;/table&gt;
+&lt;/p&gt;
+FHTML
+      my_html &lt;&lt; my_function
+    end
+    my_html &lt;&lt; "&lt;/div&gt;"
+  end
+
+  print &lt;&lt;HTML
+#{html_head}
+  &lt;div id="logo"&gt;
+    &lt;div&gt;&lt;img src="file://#{SUPPORT}/jslint.gif" width="96" height="30"&gt;&amp;nbsp;&amp;nbsp;Validate Javascript&lt;/div&gt;
+    &lt;div class="filename"&gt;&lt;code&gt;#{ENV['TM_FILEPATH']}&lt;/code&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div id="content"&gt;
+    &lt;div id="tabs"&gt;
+      &lt;ul&gt;
+      #{my_tabs}
+      &lt;/ul&gt;
+      #{my_html}
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+HTML
+
+else 
+  print &lt;&lt;HTML
+#{html_head}
+&lt;div id="logo"&gt;&lt;img src="file://#{SUPPORT}/jslint.gif" width="96" height="30"&gt;&amp;nbsp;&amp;nbsp;Validate Javascript&lt;/div&gt;
+  &lt;div id="content"&gt;
+  &lt;h3&gt;JSON gem cannot be loaded.&lt;/h3&gt;install it via &lt;pre&gt;sudo gem install json&lt;/pre&gt;
+  &lt;hr/&gt;
+  Error Message: &lt;pre&gt;#{json_load_error}&lt;/pre&gt;
+  Error Details: &lt;pre&gt;#{json_load_error.backtrace.join("\n")}&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+HTML
+
+end</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^~v</string>
+	<key>name</key>
+	<string>Validate Javascript</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>69B789EE-0B53-4A06-A000-46C48EEBD016</string>
+</dict>
+</plist>
