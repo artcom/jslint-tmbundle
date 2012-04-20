@@ -19,20 +19,37 @@ class JsLint
   attr_reader :javascript, :file, :selection, :jslint_result
   
   JSLINT_RUNNER = "#{SUPPORT_PATH}/javascripts/run_jslint.js"
+  JSLINT_RC     = "~/.jslintrc"
   
-  def initialize filePath=nil
+  def initialize filePath=nil, rc_file=JSLINT_RC
     @javascript = nil
     @file_path = filePath || ENV['TM_FILEPATH']
     @selection = ENV['TM_SELECTED_TEXT']
     @jslint_result = nil
     @executor = JSLINT::JSExecutor.new
+    @jslintrc_path = rc_file
+    @jslintrc = nil
     load_javascript
     load_options
     validate
   end
   
   def load_options
-    # TODO Determine location of .jslintrc and read/evaluate it
+    # TODO also load settings from pwd and where the file resides...
+    Logger.info "Loading settings: '#{@jslintrc_path}'"
+    if File.exists? File.expand_path(@jslintrc_path)
+      @jslintrc = File.read File.expand_path(@jslintrc_path)
+      @parsed_jslintrc = {}
+      
+      # The following does not feel nice.
+      # Yes, i could simply prepend the jslintrc to the javascript
+      # But this would shift the linenumbers and i could not report the settings
+      # being used to perform the jslinting step
+      @jslintrc[9..@jslintrc.size-4].split(",").each { |option|
+        parts = option.split(":")
+        @parsed_jslintrc[parts[0].strip] = parts[1].strip
+      }
+    end
   end
   
   def load_javascript
@@ -41,14 +58,7 @@ class JsLint
   end
   
   def validate
-    options = {
-      :adsafe => false
-    }
-#    options = <<OPTIONS_JSON
-#{"adsafe" : true}
-#OPTIONS_JSON
-    
-    result = @executor.execute JSLINT_RUNNER, [@javascript, options]
+    result = @executor.execute JSLINT_RUNNER, [@javascript, @parsed_jslintrc]
     Logger.trace("result '#{result.inspect}'")
     raise Exception.new("jslinting error: #{result[:error]}") if result[:error] != ''
     @jslint_result = JSON::parse(result[:response])

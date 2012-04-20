@@ -27,6 +27,14 @@ describe "JSExecutor" do
     result[:error].should eq("")
   end
   
+  it "options are properly escaped" do
+    myJsExecutor = JSLINT::JSExecutor.new
+    result = myJsExecutor.execute "#{RSpec.configuration.fixtures}/echo.js",
+                                  ['$`']
+    result[:response].should eq("$`")
+    result[:error].should eq("")
+  end
+  
   it "passed options which are hashes are correctly converted to json" do
     myJsExecutor = JSLINT::JSExecutor.new
     result = myJsExecutor.execute "#{RSpec.configuration.fixtures}/hash.js",
