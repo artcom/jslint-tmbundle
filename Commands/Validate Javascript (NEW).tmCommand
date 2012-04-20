@@ -19,7 +19,7 @@ FILE_PATH = ENV['TM_FILEPATH']
 
 require 'jslint'
 
-myJslint = JsLint.new "foo"
+myJslint = JsLint.new
 print myJslint.to_html</string>
 	<key>input</key>
 	<string>document</string>
