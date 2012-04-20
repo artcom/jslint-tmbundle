@@ -1,5 +1,7 @@
 $:.unshift File.expand_path("../../Support/scripts", __FILE__)
 
+#puts $:
+
 # Simulate Textmate environment
 SUPPORT_PATH = File.expand_path("../../Support", __FILE__)
 

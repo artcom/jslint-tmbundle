@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 require 'js_executor'
 
 describe "JSExecutor" do

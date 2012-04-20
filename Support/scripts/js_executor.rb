@@ -1,3 +1,5 @@
+require 'open3'
+
 module JSLINT
   
   JS_RUNTIME = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc"
