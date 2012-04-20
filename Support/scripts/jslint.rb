@@ -11,7 +11,6 @@ begin
 rescue LoadError
   Logger.warn "Cannot load gem 'coderay' - syntax highlighting will be disabled"
 end
-require 'open3'
 require 'json'
 
 require 'js_executor'
@@ -27,6 +26,7 @@ class JsLint
     @file_path = filePath || ENV['TM_FILEPATH']
     @selection = ENV['TM_SELECTED_TEXT']
     @jslint_result = nil
+    @executor = JSLINT::JSExecutor.new
     load_javascript
     load_options
     validate
@@ -43,32 +43,20 @@ class JsLint
   
   def validate
     options = {
-      :adsafe => true
+      :adsafe => false
     }
 #    options = <<OPTIONS_JSON
 #{"adsafe" : true}
 #OPTIONS_JSON
     
-    
-    # TODO generate jslint_full on demand so parts of that are easily upgradeable - maybe through an erb again?
-    command = <<CMD
-#{JS_RUNTIME} "#{SUPPORT_PATH}/javascripts/jslint_full.js" -- "#{@javascript.gsub('"', '\"')}" "#{options.to_json.gsub('"', '\"')}"
-CMD
-    
-    stdin, stdout, stderr = Open3.popen3(command)
-    raw_stdout = stdout.read.strip
-    raw_stderr = stderr.read
-    Logger.trace("raw_stdout: '#{raw_stdout}'")
-    Logger.trace("raw_stderr: '#{raw_stderr}'")
-    raise Exception.new("jslinting error: #{raw_stderr}") if raw_stderr != ''
-    @jslint_result = JSON::parse(raw_stdout)
-    stdin.close
-    stdout.close
-    stderr.close
+    result = @executor.execute "#{SUPPORT_PATH}/javascripts/jslint_full.js",
+                               [@javascript, options]
+    Logger.trace("result '#{result.inspect}'")
+    raise Exception.new("jslinting error: #{result[:error]}") if result[:error] != ''
+    @jslint_result = JSON::parse(result[:response])
   rescue Exception => e
     Logger.error("jslint.rb (jslint_full) - An Error Occured while validating:: <br>'#{e}' <br>#{e.backtrace.join('<br>')}");
-    Logger.error("command used: #{command}")
-    
+    Logger.error("command used: #{result[:command]}")
     @jslint_result = nil
   end
   

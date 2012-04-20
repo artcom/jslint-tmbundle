@@ -12,9 +12,16 @@ module JSLINT
       @runtime = theJSRuntime || JS_RUNTIME
     end
     
-    def execute script_path, options=nil
+    def execute script_path, options=[]
+      optionsString = ""
+      options.each { |option|
+        if option.kind_of? Hash
+          option = option.to_json
+        end
+        optionsString << " \"#{option.to_s.gsub('"', '\"')}\""
+      }
       command = <<CMD
-#{@runtime} "#{script_path}" -- "#{options}"
+#{@runtime} "#{script_path}" -- #{optionsString}
 CMD
 
       stdin, stdout, stderr = Open3.popen3(command)
@@ -25,7 +32,8 @@ CMD
       stderr.close
       {
         :response => raw_stdout,
-        :error  => raw_stderr
+        :error  => raw_stderr,
+        :command => command
       }
     end
   end
