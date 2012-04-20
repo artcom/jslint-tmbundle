@@ -1,1 +1,3 @@
-var myObject = { foo:'bar'};
+var myObject = {
+    foo : 'bar'
+};

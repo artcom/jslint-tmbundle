@@ -16,9 +16,9 @@ require 'js_executor'
 
 class JsLint
   
-  JS_RUNTIME = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc"
-  
   attr_reader :javascript, :file, :selection, :jslint_result
+  
+  JSLINT_RUNNER = "#{SUPPORT_PATH}/javascripts/run_jslint.js"
   
   def initialize filePath=nil
     @javascript = nil
@@ -48,8 +48,7 @@ class JsLint
 #{"adsafe" : true}
 #OPTIONS_JSON
     
-    result = @executor.execute "#{SUPPORT_PATH}/javascripts/jslint_full.js",
-                               [@javascript, options]
+    result = @executor.execute JSLINT_RUNNER, [@javascript, options]
     Logger.trace("result '#{result.inspect}'")
     raise Exception.new("jslinting error: #{result[:error]}") if result[:error] != ''
     @jslint_result = JSON::parse(result[:response])
