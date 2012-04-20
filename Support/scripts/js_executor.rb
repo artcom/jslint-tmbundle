@@ -13,16 +13,8 @@ module JSLINT
     end
     
     def execute script_path, options=[]
-      optionsString = ""
-      options.each { |option|
-        if option.kind_of? Hash
-          option = option.to_json
-        end
-        optionsString << " \"#{option.to_s.gsub('"', '\"')}\""
-      }
-      
       command = <<CMD
-cd "#{File.dirname(script_path)}" && #{@runtime} "#{script_path}" -- #{optionsString}
+cd "#{File.dirname(script_path)}" && #{@runtime} "#{script_path}" -- #{prepare_options(options)}
 CMD
 
       stdin, stdout, stderr = Open3.popen3(command)
@@ -37,6 +29,15 @@ CMD
         :command => command
       }
     end
+    
+    private
+    
+      def prepare_options options
+        options.map { |option|
+          option = option.to_json if option.kind_of? Hash
+          "\"#{option.to_s.gsub('"', '\"')}\""
+        }.join(" ")
+      end
   end
   
 end

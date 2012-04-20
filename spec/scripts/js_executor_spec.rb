@@ -10,7 +10,7 @@ describe "JSExecutor" do
     myJsExecutor.runtime.should_not be_nil
     (File.exists?(myJsExecutor.runtime)).should be_true
   end
-
+  
   it "can execute scripts and return results" do
     myJsExecutor = JSLINT::JSExecutor.new
     result = myJsExecutor.execute "#{RSpec.configuration.fixtures}/hello_world.js"
@@ -26,7 +26,7 @@ describe "JSExecutor" do
     result[:response].should eq("3")
     result[:error].should eq("")
   end
-
+  
   it "passed options which are hashes are correctly converted to json" do
     myJsExecutor = JSLINT::JSExecutor.new
     result = myJsExecutor.execute "#{RSpec.configuration.fixtures}/hash.js",
@@ -34,20 +34,26 @@ describe "JSExecutor" do
     result[:response].should eq("bar")
     result[:error].should eq("")
   end
-
+  
   it "passed options which are javascript are evalable" do
     myJsExecutor = JSLINT::JSExecutor.new
     result = myJsExecutor.execute "#{RSpec.configuration.fixtures}/eval_option.js",
-                                  ['name = "peter";']
+                                  ['var name = "peter";']
     result[:response].should eq("peter")
     result[:error].should eq("")
   end
-
+  
   it "our environment allows loading of other js files (currently only with jsc)" do
     myJsExecutor = JSLINT::JSExecutor.new
     result = myJsExecutor.execute "#{RSpec.configuration.fixtures}/load.js"
     result[:response].should eq("bar")
     result[:error].should eq("")
+  end
+  
+  it "can convert passed options to be passable via command line" do
+    myOptions = ['var foo = "bar";', 2, {:foo => 'bar'}.to_json]
+    myJsExecutor = JSLINT::JSExecutor.new
+    myJsExecutor.send(:prepare_options, myOptions).should eq('"var foo = \"bar\";" "2" "{\"foo\":\"bar\"}"')
   end
 
 end
