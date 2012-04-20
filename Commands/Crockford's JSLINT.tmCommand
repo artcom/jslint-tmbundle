@@ -110,16 +110,16 @@ html_head = &lt;&lt;HHTML
 .ui-tabs .ui-state-default { border: 2px solid gainsboro;}
   &lt;/style&gt;
   &lt;script type="text/javascript"&gt;
-	$(function() {
-		$("#tabs").tabs({collapsible: false});
-	});
+  $(function() {
+    $("#tabs").tabs({collapsible: false});
+  });
   &lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
 HHTML
 
 if json_loaded
-  raw_result = `/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc "#{SUPPORT}/jslint.js" -- "$(cat "$TM_FILEPATH")"`
+  raw_result = `/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc "#{SUPPORT}/jslint.js" -- "$(cat $TM_FILEPATH)"`
   #raw_result = `/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc "#{SUPPORT}/jslint.js" -- "$TM_SELECTED_TEXT"`
   result = JSON::parse &lt;&lt;MYJSON
 #{raw_result}

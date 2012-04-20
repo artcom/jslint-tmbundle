@@ -1,0 +1,167 @@
+<!doctype>
+<html>
+<head>
+  <script type="text/javascript" src="file://<%= @arguments[:SUPPORT_PATH] %>/javascripts/jquery-1.6.4.js"></script>
+  <script type="text/javascript" src="file://<%= @arguments[:SUPPORT_PATH] %>/javascripts/jquery-ui-1.8.16.custom.min.js"></script>
+
+  <link rel="stylesheet" href="file://<%= @arguments[:SUPPORT_PATH] %>/stylesheets/jquery-ui/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="file://<%= @arguments[:SUPPORT_PATH] %>/stylesheets/jslint.css" type="text/css" media="all" />
+
+  <script>
+    <% if @arguments[:jslint_result].nil? %>
+    var jslint_result = null;
+    <% else %>
+    var jslint_result = <%= @arguments[:jslint_result].to_json %>;
+    <% end %>
+    $(function () {
+      $("#tabs").tabs();
+      $("#debug-accordion").accordion({
+        autoHeight: false,
+        collapsible: true
+      });
+    });
+  </script>
+
+</head>
+<body>
+  <div id="header">
+    <img id="logo" src="file://<%= @arguments[:SUPPORT_PATH] %>/images/jslint.gif" width="96" height="30">
+    <div id="title">Validate Javascript</div>
+    <div class="filename">
+      <code><%= @arguments[:file_path] %></code>
+      <% if @arguments[:coderay_loaded] %>
+          <span class="filetype"><%= CodeRay::FileType[@arguments[:file_path]] %></span>
+      <% end %>
+    </div>
+  </div>
+  <div id="tabs">
+    <ul>
+      <li><a href="#tabs-1">Errors</a></li>
+      <li><a href="#tabs-2">Globals</a></li>
+      <li><a href="#tabs-3">Functions</a></li>
+      <li><a href="#tabs-4">Source</a></li>
+      <li><a href="#tabs-5">Settings</a></li>
+      <li><a href="#tabs-6">DEBUG</a></li>
+    </ul>
+    <div id="tabs-1">
+      <% if @arguments[:jslint_result].nil? %>
+        <h2 style="color: red;">Internal Error: See Debug Tab</h2>
+      <% elsif @arguments[:jslint_result]['data']['errors'] %>
+        <% if @arguments[:jslint_result]['data']['errors'].last.nil? %>
+          <h2 style="color: red;">Errors: <%= "#{@arguments[:jslint_result]['data']['errors'].size - 1}" %> feelings hurt with fatal result!</h2>
+        <% else %>
+          <h2 style="color: red;">Errors: <%= "#{@arguments[:jslint_result]['data']['errors'].size}" %> feelings hurt!</h2>
+        <% end %>
+        <% @arguments[:jslint_result]['data']['errors'].each_with_index do |error, index| %>
+          <% if !error.nil? %>
+            <% myClass = 'warning'
+               if @arguments[:jslint_result]['data']['errors'].size > index &&
+                  @arguments[:jslint_result]['data']['errors'].last.nil?
+                  myClass = 'error'
+               end %>
+            
+
+              <a class="<%= myClass %>" href="txmt://open?url=file://<%= @arguments[:file_path] %>&line=<%= error['line'] %>&column=<%= error['character'] %>">
+                  <strong><%= index + 1 %>: Line <%= error['line'] %>, character: <%= error['character'] %></strong>: <%= error['reason'] %>
+                </a>
+                <% if @arguments[:coderay_loaded] %>
+                  <%= CodeRay.scan(error['evidence'], :javascript).div %>
+                <% else%>
+                  <pre><%= error['evidence'] %></pre>
+                <% end %>
+                <pre class="column_highlight"><%= "&nbsp;" * (error['character'].to_i - 1) %>^</pre>
+
+          <% end %>
+        <% end %>
+      <% else %>
+        <h2 style="color: green;">Errors: None - Congratulations!</h2>
+      <% end %>
+    </div>
+    <div id="tabs-2">
+      <% if @arguments[:jslint_result] &&
+            @arguments[:jslint_result]['data']['globals'] %>
+        <h3>Globals</h3>
+        <ul>
+        <% @arguments[:jslint_result]['data']['globals'].each do |global| %>
+          <li><code class="global"><%= global %></code></li>
+        <% end %>
+        </ul>
+      <% end %>
+      
+      <% if @arguments[:jslint_result] &&
+            @arguments[:jslint_result]['data']['implieds'] %>
+        <h3>Implied</h3>
+        <ul>
+        <% @arguments[:jslint_result]['data']['implieds'].each do |implied| %>
+          <li><a class="function" href="txmt://open?url=file://<%= @arguments[:file_path] %>&line=<%= implied['line'] %>">
+            <strong>line(s) <%= implied['line'].join "," %>:</strong> <code class="global"><%= implied['name'] %></code></a></li>
+        <% end %>
+        </ul>
+      <% end %>
+    </div>
+    
+    <div id="tabs-3">
+      <% if @arguments[:jslint_result] &&
+            @arguments[:jslint_result]['data']['functions'] %>
+        <% @arguments[:jslint_result]['data']['functions'].each_with_index do |function, index| %>
+          <p>
+          <a class="function" href="txmt://open?url=file://<%= @arguments[:file_path] %>&line=<%= function['line'] %>">
+            <%= function['line'] %>: <strong><%= function['name'] %></strong>
+          </a>
+          <table class="function_details" cellspacing="0">
+          <% if !function['param'].nil? %>
+            <tr><th>Params</th><td><code><%= function['param'].join("<br>") %></code></td></tr>
+          <% end %>
+          <% if !function['global'].nil? %>
+            <tr><th>Used Globals</th><td><code><%= function['global'].join("<br>") %></code></td></tr>
+          <% end %>
+          <% if !function['outer'].nil? %>
+            <tr><th>Outer references</th><td><code><%= function['outer'].join("<br>") %></code></td></tr>
+          <% end %>
+          <% if !function['var'].nil? %>
+            <tr><th>Local variables</th><td><code><%= function['var'].join("<br>") %></code></td></tr>
+          <% end %>
+          <% if !function['closure'].nil? %>
+            <tr><th>Closure members</th><td><code><%= function['closure'].join("<br>") %></code></td></tr>
+          <% end %>
+          <% if !function['unused'].nil? %>
+            <tr><th style="color: red;">Unused variables</th><td><code><%= function['unused'].join("<br>") %></code></td></tr>
+          <% end %>
+          <% if !function['exception'].nil? %>
+            <tr><th>Exceptions</th><td><code><%= function['exception'].join("</br>") %></code></td></tr>
+          <% end %>
+          </table>
+          </p>
+        <% end %>
+      <% end%>
+    </div>
+    <div id="tabs-4">
+      <%= CodeRay.scan_file(@arguments[:file_path]).div(:line_numbers => :table)%>
+    </div>
+    <div id="tabs-5">
+    </div>
+    <div id="tabs-6">
+      <div id="debug-accordion">
+        <h3><a href="#">Debug-Log</a></h3>
+        <div>
+          <ul>
+          <% @arguments[:logger].log.each do |log_entry| %>
+            <li class="log_<%= log_entry.level %>"><%= log_entry %></li>
+          <% end %>
+          </ul>
+        </div>
+        <h3><a href="#">Environment</a></h3>
+        <div>
+          <table>
+          <% ENV.each_key do |key|%>
+            <tr>
+            <td><%= key %></td><td><%= ENV[key] %></td>
+            </tr>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+</body>

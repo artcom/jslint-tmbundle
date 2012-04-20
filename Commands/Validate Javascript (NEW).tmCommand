@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+# just to remind you of some useful environment variables
+# see Help / Environment Variables for the full list
+#echo File: "$TM_FILEPATH"
+#echo Word: "$TM_CURRENT_WORD"
+#echo Selection: "$TM_SELECTED_TEXT"
+
+SUPPORT_PATH = ENV['TM_BUNDLE_SUPPORT']
+$LOAD_PATH &lt;&lt; "#{SUPPORT_PATH}/scripts"
+FILE_PATH = ENV['TM_FILEPATH']
+
+require 'jslint'
+
+myJslint = JsLint.new "foo"
+print myJslint.to_html</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^~c</string>
+	<key>name</key>
+	<string>Validate Javascript (NEW)</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>34099922-D7E3-4A83-8662-6BE4839224E2</string>
+</dict>
+</plist>

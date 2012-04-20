@@ -1,0 +1,85 @@
+#header {
+    background-color: gainsboro;
+    padding: 6px;
+    margin-bottom: 9px;
+}
+
+#title {
+    font-size:24px;
+    margin-bottom: 6px;
+}
+
+#logo {
+    float:right;
+}
+
+.filetype {
+    border: 1px solid #afafaf;
+    background-color: #cfcff5;
+    padding:2px 4px;
+    width: 200px;
+}
+
+code {
+    background: #f5f5f5;
+    border: 1px solid #cfcfcf;
+    padding:2px 4px;
+}
+
+code.global {
+    background: transparent;
+    padding: 0px;
+    border: none;
+}
+
+pre {
+    background-color: #f5f5f5;
+    margin: 0px;
+    margin-left: 15px;
+}
+
+pre.column_highlight {
+    color:red;
+    background-color: transparent;
+}
+
+a.warning {
+    background-image: url('../images/icons/bullet_error.png');
+    background-repeat: no-repeat;
+    background-position: 0px 2px;
+    padding-left: 15px;
+}
+
+a.error {
+    background-image: url('../images/icons/bullet_delete.png');
+    background-repeat: no-repeat;
+    background-position: 0px 2px;
+    padding-left: 15px;
+}
+
+a.function {
+    font-family: monospace;
+    text-decoration:none;
+}
+
+table.function_details {
+  border: 1px solid gainsboro;
+}
+
+table.function_details td {
+  border: 1px solid gainsboro;
+  background-color: #f5f5f5;
+}
+
+table.function_details th {
+  border-top: 1px solid gainsboro;
+  border-bottom: 1px solid gainsboro;
+  font-weight: bold;
+  /*background-color: #f5f5f5;*/
+  width: 160px;
+  text-align: right;
+}
+
+table.function_details TD CODE {
+  border: none;
+}
