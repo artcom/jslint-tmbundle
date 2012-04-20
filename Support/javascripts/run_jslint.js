@@ -1,3 +1,2 @@
-load('jslint.js');
-load('json2.js');
+load('../vendor/jslint/jslint.js');
 load('jslint_support.js');
