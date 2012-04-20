@@ -12,7 +12,6 @@ rescue LoadError
   Logger.warn "Cannot load gem 'coderay' - syntax highlighting will be disabled"
 end
 require 'json'
-
 require 'js_executor'
 
 class JsLint

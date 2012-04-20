@@ -20,8 +20,9 @@ module JSLINT
         end
         optionsString << " \"#{option.to_s.gsub('"', '\"')}\""
       }
+      
       command = <<CMD
-#{@runtime} "#{script_path}" -- #{optionsString}
+cd "#{File.dirname(script_path)}" && #{@runtime} "#{script_path}" -- #{optionsString}
 CMD
 
       stdin, stdout, stderr = Open3.popen3(command)

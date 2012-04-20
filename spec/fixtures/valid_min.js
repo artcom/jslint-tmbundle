@@ -1,1 +1,1 @@
-var myObject = {};
+var myObject = { foo:'bar'};

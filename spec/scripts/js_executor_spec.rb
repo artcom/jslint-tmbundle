@@ -16,7 +16,7 @@ describe "JSExecutor" do
     result = myJsExecutor.execute "#{RSpec.configuration.fixtures}/hello_world.js"
     result[:response].should eq("Hello World!")
     result[:error].should eq("")
-    result[:command].should eq("#{JSLINT::JS_RUNTIME} \"#{RSpec.configuration.fixtures}/hello_world.js\" -- \n")
+    #result[:command].should eq("#{JSLINT::JS_RUNTIME} \"#{RSpec.configuration.fixtures}/hello_world.js\" -- \n")
   end
   
   it "can pass options into javascript" do
@@ -40,6 +40,13 @@ describe "JSExecutor" do
     result = myJsExecutor.execute "#{RSpec.configuration.fixtures}/eval_option.js",
                                   ['name = "peter";']
     result[:response].should eq("peter")
+    result[:error].should eq("")
+  end
+
+  it "our environment allows loading of other js files (currently only with jsc)" do
+    myJsExecutor = JSLINT::JSExecutor.new
+    result = myJsExecutor.execute "#{RSpec.configuration.fixtures}/load.js"
+    result[:response].should eq("bar")
     result[:error].should eq("")
   end
 
