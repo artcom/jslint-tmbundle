@@ -14,15 +14,17 @@ end
 require 'open3'
 require 'json'
 
+require 'js_executor'
+
 class JsLint
   
   JS_RUNTIME = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc"
   
   attr_reader :javascript, :file, :selection, :jslint_result
   
-  def initialize file
+  def initialize filePath=nil
     @javascript = nil
-    @file_path = ENV['TM_FILEPATH']
+    @file_path = filePath || ENV['TM_FILEPATH']
     @selection = ENV['TM_SELECTED_TEXT']
     @jslint_result = nil
     load_javascript
@@ -31,7 +33,7 @@ class JsLint
   end
   
   def load_options
-    # Determine location of .jslintrc and read/evaluate it
+    # TODO Determine location of .jslintrc and read/evaluate it
   end
   
   def load_javascript
@@ -41,12 +43,14 @@ class JsLint
   
   def validate
     options = {
-      :adsafe => false
+      :adsafe => true
     }
 #    options = <<OPTIONS_JSON
 #{"adsafe" : true}
 #OPTIONS_JSON
     
+    
+    # TODO generate jslint_full on demand so parts of that are easily upgradeable - maybe through an erb again?
     command = <<CMD
 #{JS_RUNTIME} "#{SUPPORT_PATH}/javascripts/jslint_full.js" -- "#{@javascript.gsub('"', '\"')}" "#{options.to_json.gsub('"', '\"')}"
 CMD
