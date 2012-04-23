@@ -1,0 +1,29 @@
+= JSLint TextMate Bundle =
+
+* Allows jslinting saved files with Crockford's JSLint.
+
+* Activate by using CTRL+ALT+C
+
+== Installation ==
+
+Install by cloning into
+
+  ~/Library/Application Support/TextMate/Bundles/JSLINT.tmbundle
+  
+or cloning somewhere else and symlinking it there.
+
+== .jslintrc support ==
+
+This bundle supports using '~/.jslintrc'. Recommended Settings:
+
+  /*jslint infixin: true, nomen:true, sloppy: true, vars: true, white: true, forin: true, plusplus: true, continue: true, bitwise: true */
+
+== References & Attributions ==
+
+* The jslint variant being used can be found at
+
+  https://github.com/artcom/JSLint
+
+Note: infixin is a custom setting disabling the 'in' operator checks.
+
+* Uses Jquery and Jquery-ui

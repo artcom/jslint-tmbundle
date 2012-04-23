@@ -101,6 +101,9 @@
     </div>
     
     <div id="tabs-3">
+      <h3>Functions</h3><p>
+        Lists functions and their parameters and other properties.
+      </p>
       <% if @arguments[:jslint_result] &&
             @arguments[:jslint_result]['data']['functions'] %>
         <% @arguments[:jslint_result]['data']['functions'].each_with_index do |function, index| %>
@@ -136,9 +139,36 @@
       <% end%>
     </div>
     <div id="tabs-4">
-      <%= CodeRay.scan_file(@arguments[:file_path]).div(:line_numbers => :table)%>
+      <h3>Source</h3>
+      <p>The source being jslinted.<br/>
+        <% if !@arguments[:coderay_loaded] %>
+        <i>Note:</i>Install gem <code>coderay</code> for full funcionality<br/>
+        <% end %>
+        TODO: Add annotations about found problems inline (linked & with tooltips)</p>
+      <% if @arguments[:coderay_loaded] %>
+        <%= CodeRay.scan_file(@arguments[:file_path]).div(:line_numbers => :table)%>
+      <% else %>
+      <pre>
+<% lineno = 1; IO.foreach(@arguments[:file_path]) do |line| %><%= "#{lineno} - #{line}" %><% lineno += 1; end %></pre>
+      <% end %>
     </div>
     <div id="tabs-5">
+      <h3>Settings</h3>
+      <p>
+        WIP : In the future jslintrc and other used options will be here and from where a setting originates.
+        TODO : Also allow changing the settings
+      </p>
+      Settings used from: <code>~/.jslintrc</code>
+
+        <% if @arguments[:jslint_rc].nil? %>
+          <strong><code>Cannot find file</code></strong>
+        <% else %>
+          <ul>
+          <% @arguments[:jslint_rc].each_pair do |key, value| %>
+            <li><%= "#{key} : #{value}"%></li>
+          <% end %>
+          </ul>
+        <% end %>
     </div>
     <div id="tabs-6">
       <div id="debug-accordion">
@@ -162,6 +192,4 @@
       </div>
     </div>
   </div>
-  
-  
 </body>

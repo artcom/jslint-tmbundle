@@ -29,6 +29,7 @@ class JsLint
     @executor = JSLINT::JSExecutor.new
     @jslintrc_path = rc_file
     @jslintrc = nil
+    @parsed_jslintrc = nil
     load_javascript
     load_options
     validate
@@ -73,12 +74,13 @@ class JsLint
       template = ERB.new(fd.read)
       
       scope    = TemplateScope.new({
-        :javascript   => @javascript,
-        :file_path    => @file_path,
-        :logger       => Logger,
-        :SUPPORT_PATH => SUPPORT_PATH,
-        :ENV          => ENV,
-        :jslint_result => @jslint_result,
+        :javascript     => @javascript,
+        :file_path      => @file_path,
+        :logger         => Logger,
+        :SUPPORT_PATH   => SUPPORT_PATH,
+        :ENV            => ENV,
+        :jslint_result  => @jslint_result,
+        :jslint_rc      => @parsed_jslintrc,
         :coderay_loaded => @@coderay_loaded
       }).get_binding
       html   = template.result(scope)
