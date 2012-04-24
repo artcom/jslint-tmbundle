@@ -14,11 +14,25 @@
     var jslint_result = <%= @arguments[:jslint_result].to_json %>;
     <% end %>
     $(function () {
-      $("#tabs").tabs();
-      $("#debug-accordion").accordion({
-        autoHeight: false,
-        collapsible: true
-      });
+        
+        var remainingHeight = function () {
+            return $(window).height() - $("#header").height() - 120;
+        }
+        
+        $("#tabs").tabs({
+            show : function(event, ui) {
+              $(ui.panel).css({height : remainingHeight()})
+            }
+        });
+        
+        $(window).resize(function() {
+          $(".ui-tabs-panel:visible").css({height : remainingHeight()});
+        });
+        
+        $("#debug-accordion").accordion({
+          autoHeight: false,
+          collapsible: true
+        });
     });
   </script>
 
@@ -77,6 +91,7 @@
         <h2 style="color: green;">Errors: None - Congratulations!</h2>
       <% end %>
     </div>
+    
     <div id="tabs-2">
       <% if @arguments[:jslint_result] &&
             @arguments[:jslint_result]['data']['globals'] %>
@@ -138,6 +153,7 @@
         <% end %>
       <% end%>
     </div>
+    
     <div id="tabs-4">
       <h3>Source</h3>
       <p>The source being jslinted.<br/>
@@ -152,6 +168,7 @@
 <% lineno = 1; IO.foreach(@arguments[:file_path]) do |line| %><%= "#{lineno} - #{line}" %><% lineno += 1; end %></pre>
       <% end %>
     </div>
+    
     <div id="tabs-5">
       <h3>Settings</h3>
       <p>
@@ -170,6 +187,7 @@
           </ul>
         <% end %>
     </div>
+    
     <div id="tabs-6">
       <div id="debug-accordion">
         <h3><a href="#">Debug-Log</a></h3>

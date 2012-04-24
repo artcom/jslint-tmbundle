@@ -13,6 +13,14 @@
     float:right;
 }
 
+#tabs {
+  
+}
+
+#tabs > DIV {
+  overflow-y: scroll;
+}
+
 .filetype {
     border: 1px solid #afafaf;
     background-color: #cfcff5;
