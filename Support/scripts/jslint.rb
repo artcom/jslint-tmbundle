@@ -13,6 +13,7 @@ rescue LoadError
 end
 require 'json'
 require 'js_executor'
+require 'pp'
 
 class JsLint
   
@@ -60,11 +61,12 @@ class JsLint
   
   def validate
     result = @executor.execute JSLINT_RUNNER, [@javascript, @parsed_jslintrc]
-    Logger.trace("result '#{result.inspect}'")
+    #Logger.trace("Raw Jslinting result: \n'#{PP.pp(result, "", 79)}'")
     raise Exception.new("jslinting error: #{result[:error]}") if result[:error] != ''
     @jslint_result = JSON::parse(result[:response])
+    Logger.trace("Json Jslinting result: \n'#{PP.pp(@jslint_result, "", 79)}'")
   rescue Exception => e
-    Logger.error("jslint.rb (jslint_full) - An Error Occured while validating:: <br>'#{e}' <br>#{e.backtrace.join('<br>')}");
+    Logger.error("jslint.rb (jslint_full) - An Error Occured while validating:: <br/>'#{e}' <br/>#{e.backtrace.join('<br/>')}");
     Logger.error("command used: #{result[:command]}")
     @jslint_result = nil
   end

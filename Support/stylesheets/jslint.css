@@ -40,6 +40,12 @@ code.global {
     border: none;
 }
 
+code.log {
+    background: transparent;
+    padding: 0px;
+    border: none;
+}
+
 pre {
     background-color: #f5f5f5;
     margin: 0px;
@@ -67,7 +73,7 @@ a.error {
 
 a.function {
     font-family: monospace;
-    text-decoration:none;
+    /*text-decoration:none;*/
 }
 
 table.function_details {

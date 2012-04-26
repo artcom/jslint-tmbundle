@@ -160,7 +160,6 @@
         <% if !@arguments[:coderay_loaded] %>
         <i>Note:</i>Install gem <code>coderay</code> for full funcionality<br/>
         <% end %>
-        TODO: Add annotations about found problems inline (linked & with tooltips)</p>
       <% if @arguments[:coderay_loaded] %>
         <%= CodeRay.scan_file(@arguments[:file_path]).div(:line_numbers => :table)%>
       <% else %>
@@ -171,20 +170,19 @@
     
     <div id="tabs-5">
       <h3>Settings</h3>
-      <p>
-        WIP : In the future jslintrc and other used options will be here and from where a setting originates.
-        TODO : Also allow changing the settings
-      </p>
       Settings used from: <code>~/.jslintrc</code>
 
         <% if @arguments[:jslint_rc].nil? %>
           <strong><code>Cannot find file</code></strong>
         <% else %>
-          <ul>
+          <table>
           <% @arguments[:jslint_rc].each_pair do |key, value| %>
-            <li><%= "#{key} : #{value}"%></li>
+            <tr>
+              <td><code><%= key %></code></td>
+              <td style="font-family:monospace;"><%= value %></td>
+            </tr>
           <% end %>
-          </ul>
+          </table>
         <% end %>
     </div>
     
@@ -194,7 +192,7 @@
         <div>
           <ul>
           <% @arguments[:logger].log.each do |log_entry| %>
-            <li class="log_<%= log_entry.level %>"><%= log_entry %></li>
+            <li class="log_<%= log_entry.level %>"><pre class="log"><%= log_entry %></pre></li>
           <% end %>
           </ul>
         </div>
@@ -203,7 +201,7 @@
           <table>
           <% ENV.each_key do |key|%>
             <tr>
-            <td><%= key %></td><td><%= ENV[key] %></td>
+            <td><strong><code class="log"><%= key %></code></strong></td><td><code class="log"><%= ENV[key] %></code></td>
             </tr>
           <% end %>
         </div>
