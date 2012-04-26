@@ -5,13 +5,22 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>$TM_RUBY "$TM_BUNDLE_SUPPORT/scripts/jslintrunner.rb"</string>
+	<string>CMD="$TM_BUNDLE_SUPPORT/scripts/jslintrunner.rb"
+if [ -z "$TM_RUBY" ]
+then
+  #default ruby
+  ruby "$CMD"
+else
+  # using env supplied ruby
+  # see https://rvm.io/integration/textmate/
+  $TM_RUBY "$CMD"
+fi</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>
 	<string>^~c</string>
 	<key>name</key>
-	<string>Validate Javascript (NEW)</string>
+	<string>Validate Javascript</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
