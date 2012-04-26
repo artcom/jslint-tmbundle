@@ -12,6 +12,20 @@ Install by cloning into
   
 or cloning somewhere else and symlinking it there.
 
+== TextMate & rvm ==
+
+It is possible to create an environment for rvm in textmate by following the
+instructions on:
+
+  https://rvm.io/integration/textmate/
+
+the TM_RUBY will then be used automatically by the bundle. Otherwise the 
+system ruby will be used.
+
+== Syntax highlighting support ==
+
+the gem 'coderay' can be used (optionally) to highlight code.
+
 == .jslintrc support ==
 
 This bundle supports using '~/.jslintrc'. Recommended Settings:
@@ -27,3 +41,8 @@ This bundle supports using '~/.jslintrc'. Recommended Settings:
 Note: infixin is a custom setting disabling the 'in' operator checks.
 
 * Uses Jquery and Jquery-ui
+
+== Development setup ==
+
+The bundle uses rspec and guard for development. The requires gems can be
+installed by bundler with the supplied Gemfile.

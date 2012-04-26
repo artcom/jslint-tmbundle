@@ -5,22 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby
-
-# just to remind you of some useful environment variables
-# see Help / Environment Variables for the full list
-#echo File: "$TM_FILEPATH"
-#echo Word: "$TM_CURRENT_WORD"
-#echo Selection: "$TM_SELECTED_TEXT"
-
-SUPPORT_PATH = ENV['TM_BUNDLE_SUPPORT']
-$LOAD_PATH &lt;&lt; "#{SUPPORT_PATH}/scripts"
-FILE_PATH = ENV['TM_FILEPATH']
-
-require 'jslint'
-
-myJslint = JsLint.new
-print myJslint.to_html</string>
+	<string>$TM_RUBY "$TM_BUNDLE_SUPPORT/scripts/jslintrunner.rb"</string>
 	<key>input</key>
 	<string>document</string>
 	<key>keyEquivalent</key>

@@ -18,7 +18,7 @@ class JsLint
   
   attr_reader :javascript, :file, :selection, :jslint_result
   
-  JSLINT_RUNNER = "#{SUPPORT_PATH}/javascripts/run_jslint.js"
+  JSLINT_RUNNER = "#{ENV['TM_BUNDLE_SUPPORT']}/javascripts/run_jslint.js"
   JSLINT_RC     = "~/.jslintrc"
   
   def initialize filePath=nil, rc_file=JSLINT_RC
@@ -70,14 +70,14 @@ class JsLint
   end
   
   def to_html
-    File.open("#{SUPPORT_PATH}/templates/jslint.html.erb") do |fd|
+    File.open("#{ENV['TM_BUNDLE_SUPPORT']}/templates/jslint.html.erb") do |fd|
       template = ERB.new(fd.read)
       
       scope    = TemplateScope.new({
         :javascript     => @javascript,
         :file_path      => @file_path,
         :logger         => Logger,
-        :SUPPORT_PATH   => SUPPORT_PATH,
+        :SUPPORT_PATH   => ENV['TM_BUNDLE_SUPPORT'],
         :ENV            => ENV,
         :jslint_result  => @jslint_result,
         :jslint_rc      => @parsed_jslintrc,
