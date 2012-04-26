@@ -1,0 +1,6 @@
+* Also read jslintrc from pwd and current project?
+* Allow editing of settings
+* Show errors and warnings on the source view as well
+
+* Add a hook on-save in textmate document to quickly show number
+  of errors/warnings (similar to built-in JavaScriptLint bundle)
