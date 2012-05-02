@@ -56,6 +56,7 @@
       <li><a href="#tabs-4">Source</a></li>
       <li><a href="#tabs-5">Settings</a></li>
       <li><a href="#tabs-6">DEBUG</a></li>
+      <li><a href="#tabs-7">About</a></li>
     </ul>
     <div id="tabs-1">
       <% if @arguments[:jslint_result].nil? %>
@@ -204,8 +205,24 @@
             <td><strong><code class="log"><%= key %></code></strong></td><td><code class="log"><%= ENV[key] %></code></td>
             </tr>
           <% end %>
+          </table>
         </div>
       </div>
     </div>
+    
+    <div id="tabs-7">
+      <h3>About</h3>
+      <p>
+        Allows validating javascripts with crockford's jslint.
+      </p>
+      <p>
+        <ul>
+          <li>JsLint: <a href="https://github.com/douglascrockford/JSLint">https://github.com/douglascrockford/JSLint</a> using fork <a href="https://github.com/artcom/JSLint">https://github.com/artcom/JSLint</a></li>
+          <li>Silk Icon Set 1.3: <a href="http://www.famfamfam.com/lab/icons/silk/">http://www.famfamfam.com/lab/icons/silk/</a></li>
+          <li>jQuery & jQuery UI: <a href="http://jquery.org">http://jquery.org</li>
+        </ul>
+      </p>
+    </div>
+    
   </div>
 </body>
