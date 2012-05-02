@@ -1,6 +1,6 @@
 # JSLint TextMate Bundle
 
-![Example Session](jslint-tmbundle/Support/images/screenshots/errors.png "Listing hurt feelings")
+![Example Session](jslint-tmbundle/blob/master/Support/images/screenshots/errors.png "Listing hurt feelings")
 
 * Allows jslinting saved files with Crockford's JSLint.
 
@@ -8,7 +8,7 @@
 
 * Also generates reports on full data returned by JsLint
 
-  ![Functions](jslint-tmbundle/Support/images/screenshots/functions.png "Functions")
+  ![Functions](jslint-tmbundle/blob/master/Support/images/screenshots/functions.png "Functions")
 
 ## Installation
 
@@ -30,7 +30,7 @@ system ruby will be used.
 
 The gem [coderay] can be used (optionally) to highlight code.
 
-![Highlighted Source](jslint-tmbundle/Support/images/screenshots/source.png "Example source listing")
+![Highlighted Source](jslint-tmbundle/blob/master/Support/images/screenshots/source.png "Example source listing")
 
 ## .jslintrc support
 
@@ -38,7 +38,7 @@ This bundle supports using '~/.jslintrc'. Recommended Settings:
 
     /*jslint infixin: true, nomen:true, sloppy: true, vars: true, white: true, forin: true, plusplus: true, continue: true, bitwise: true */
 
-![Settings](jslint-tmbundle/Support/images/screenshots/settings.png "Detected Settings")
+![Settings](jslint-tmbundle/blob/master/Support/images/screenshots/settings.png "Detected Settings")
 
 ## References & Attributions
 
