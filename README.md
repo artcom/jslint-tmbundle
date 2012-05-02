@@ -1,8 +1,14 @@
 # JSLint TextMate Bundle
 
+![Example Session](Support/images/screenshots/errors.png "Listing hurt feelings")
+
 * Allows jslinting saved files with Crockford's JSLint.
 
 * Activate by using `CTRL+ALT+C`
+
+* Also generates reports on full data returned by JsLint
+
+  ![Functions](Support/images/screenshots/functions.png "Functions")
 
 ## Installation
 
@@ -22,13 +28,17 @@ system ruby will be used.
 
 ## Syntax highlighting support
 
-The gem `coderay` can be used (optionally) to highlight code.
+The gem [coderay] can be used (optionally) to highlight code.
+
+![Highlighted Source](Support/images/screenshots/source.png "Example source listing")
 
 ## .jslintrc support
 
 This bundle supports using '~/.jslintrc'. Recommended Settings:
 
     /*jslint infixin: true, nomen:true, sloppy: true, vars: true, white: true, forin: true, plusplus: true, continue: true, bitwise: true */
+
+![Settings](Support/images/screenshots/settings.png "Detected Settings")
 
 ## References & Attributions
 
@@ -43,5 +53,9 @@ This bundle supports using '~/.jslintrc'. Recommended Settings:
 The bundle uses rspec and guard for development. The requires gems can be
 installed by bundler with the supplied Gemfile.
 
+- - -
+*Copyright (c) ART+COM AG, Berlin Germany 2012 - Author: Andreas Marr (andreas.marr@artcom.de)*
+
   [rvm homepage]: https://rvm.io/integration/textmate/
   [fork]: https://github.com/artcom/JSLint
+  [coderay]: https://github.com/rubychan/coderay
