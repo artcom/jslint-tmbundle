@@ -159,7 +159,7 @@
       <h3>Source</h3>
       <p>The source being jslinted.<br/>
         <% if !@arguments[:coderay_loaded] %>
-        <i>Note:</i>Install gem <code>coderay</code> for full funcionality<br/>
+        <i>Note:</i>Install gem <code>coderay</code> for full functionality<br/>
         <% end %>
       <% if @arguments[:coderay_loaded] %>
         <%= CodeRay.scan_file(@arguments[:file_path]).div(:line_numbers => :table)%>
