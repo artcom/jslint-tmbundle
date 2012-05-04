@@ -48,6 +48,8 @@ This bundle supports using '~/.jslintrc'. Recommended Settings:
 
 * Uses Jquery and Jquery-ui
 
+* Uses [Silk Icon Set] 1.3
+
 ## Development setup
 
 The bundle uses rspec and guard for development. The requires gems can be
@@ -59,3 +61,4 @@ installed by bundler with the supplied Gemfile.
   [rvm homepage]: https://rvm.io/integration/textmate/
   [fork]: https://github.com/artcom/JSLint
   [coderay]: https://github.com/rubychan/coderay
+  [Silk Icon Set]: http://www.famfamfam.com/lab/icons/silk/
