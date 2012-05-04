@@ -19,6 +19,7 @@
 
 #tabs > DIV {
   overflow-y: scroll;
+  box-shadow: inset -6px 0px 20px #CCC;
 }
 
 .filetype {
