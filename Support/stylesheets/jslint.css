@@ -58,6 +58,27 @@ pre.column_highlight {
     background-color: transparent;
 }
 
+/* for coderay START*/
+.line-numbers pre {
+  padding-right: 16px;
+  margin-left: 0px;
+}
+.line-numbers pre a {
+  padding-left: 16px;
+  display: block;
+  float: left;
+  width: 100%;
+}
+
+a.coderay_warning {
+    background-image: url('../images/icons/bullet_error.png');
+    background-repeat: no-repeat;
+    background-position: 0px 2px;
+    background-color: #caa;
+    padding-left: 0px;
+}
+/* for coderay END*/
+
 a.warning {
     background-image: url('../images/icons/bullet_error.png');
     background-repeat: no-repeat;

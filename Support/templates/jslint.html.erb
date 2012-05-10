@@ -3,6 +3,7 @@
 <head>
   <script type="text/javascript" src="file://<%= @arguments[:SUPPORT_PATH] %>/vendor/jquery/jquery-1.7.2.min.js"></script>
   <script type="text/javascript" src="file://<%= @arguments[:SUPPORT_PATH] %>/vendor/jquery-ui-1.8.19.custom/js/jquery-ui-1.8.19.custom.min.js"></script>
+  <script type="text/javascript" src="file://<%= @arguments[:SUPPORT_PATH] %>/vendor/jquery.qtip-1.0.0-rc3.custom/jquery.qtip-1.0.0-rc3.min.js"></script>
 
   <link rel="stylesheet" href="file://<%= @arguments[:SUPPORT_PATH] %>/vendor/jquery-ui-1.8.19.custom/css/smoothness/jquery-ui-1.8.19.custom.css" type="text/css" media="all" />
   <link rel="stylesheet" href="file://<%= @arguments[:SUPPORT_PATH] %>/stylesheets/jslint.css" type="text/css" media="all" />
@@ -12,7 +13,26 @@
     var jslint_result = null;
     <% else %>
     var jslint_result = <%= @arguments[:jslint_result].to_json %>;
+    jslint_result.getErrorsForLine = function (theLineNo) {
+      var i, myError;
+      result = [];
+      if ("data" in this &&
+          "errors" in this.data) {
+          for (i = 0; i < this.data.errors.length; i++) {
+            myError = this.data.errors[i];
+            if (myError !== null &&
+                myError.line === theLineNo) {
+                    result.push(myError);
+            }
+          }
+      }
+      return result;
+    }
     <% end %>
+    
+    // expose parts of the arguments to javascript
+    var file_path = "<%= @arguments[:file_path] %>";
+    
     $(function () {
         
         var remainingHeight = function () {
@@ -32,6 +52,40 @@
         $("#debug-accordion").accordion({
           autoHeight: false,
           collapsible: true
+        });
+        // Coderay fixes
+        $(".line-numbers").removeAttr("title")
+                          .removeAttr("ondblclick");
+        
+        $(".line-numbers a[href]").each(function (line, link) {
+            var i, currentError;
+            var curLine = line + 1;
+            var errorsForCurrentLine = jslint_result.getErrorsForLine(curLine)
+            var myColumn = 0;
+            if (errorsForCurrentLine.length > 0) {
+                $(link).addClass("coderay_warning");
+                var errorHtmls = [];
+                for (i = 0; i < errorsForCurrentLine.length; i++) {
+                    currentError = errorsForCurrentLine[i];
+                    myColumn = currentError.character;
+                    var myHtml = "Character <strong>" + currentError.character + "</strong>: " +
+                                 "<pre>" + currentError.reason + "</pre>";
+                    errorHtmls.push(myHtml);
+                }
+                $(link).qtip({
+                    content: errorHtmls.join("<br/>"),
+                    style: {
+                      width: 500
+                    },
+                    position: {
+                        corner: {
+                            target : "topRight",
+                            tooltip: "bottomLeft"
+                        }
+                    }
+                });
+            }
+            $(link).attr("href", "txmt://open?url=file://" + file_path + "&line=" + curLine + "&column=" + myColumn);
         });
     });
   </script>
@@ -74,8 +128,6 @@
                   @arguments[:jslint_result]['data']['errors'].last.nil?
                   myClass = 'error'
                end %>
-            
-
               <a class="<%= myClass %>" href="txmt://open?url=file://<%= @arguments[:file_path] %>&line=<%= error['line'] %>&column=<%= error['character'] %>">
                   <strong><%= index + 1 %>: Line <%= error['line'] %>, character: <%= error['character'] %></strong>: <%= error['reason'] %>
                 </a>
@@ -85,7 +137,6 @@
                   <pre><%= error['evidence'] %></pre>
                 <% end %>
                 <pre class="column_highlight"><%= "&nbsp;" * (error['character'].to_i - 1) %>^</pre>
-
           <% end %>
         <% end %>
       <% else %>
@@ -202,7 +253,14 @@
           <table>
           <% ENV.each_key do |key|%>
             <tr>
-            <td><strong><code class="log"><%= key %></code></strong></td><td><code class="log"><%= ENV[key] %></code></td>
+              <td>
+                <strong>
+                  <code class="log"><%= key %></code>
+                </strong>
+              </td>
+              <td>
+                <code class="log"><%= ENV[key] %></code>
+              </td>
             </tr>
           <% end %>
           </table>
@@ -220,6 +278,7 @@
           <li>JsLint: <a href="https://github.com/douglascrockford/JSLint">https://github.com/douglascrockford/JSLint</a> using fork <a href="https://github.com/artcom/JSLint">https://github.com/artcom/JSLint</a></li>
           <li>Silk Icon Set 1.3: <a href="http://www.famfamfam.com/lab/icons/silk/">http://www.famfamfam.com/lab/icons/silk/</a></li>
           <li>jQuery & jQuery UI: <a href="http://jquery.org">http://jquery.org</a></li>
+          <li>Qtip: <a href="http://craigsworks.com/projects/qtip/">http://craigsworks.com/projects/qtip/</a></li>
         </ul>
       </p>
       <hr/>
