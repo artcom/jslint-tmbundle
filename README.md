@@ -54,7 +54,7 @@ This bundle supports using '~/.jslintrc'. Recommended Settings:
 
 ## Development setup
 
-The bundle uses rspec and guard for development. The requires gems can be
+The bundle uses rspec and guard for development. The required gems can be
 installed by bundler with the supplied Gemfile.
 
 - - -
