@@ -6,7 +6,11 @@ require 'json'
 describe "JSExecutor" do
 
   before(:each) do
-    @jsexecutor = JSLINT::JSExecutor.new #JSLINT::RuntimeSpecs::RHINO
+    myRuntimeSpec = JSLINT::RuntimeSpecs::JSC
+    if ENV['js_runtime'] == "rhino"
+      myRuntimeSpec = JSLINT::RuntimeSpecs::RHINO
+    end
+    @jsexecutor = JSLINT::JSExecutor.new myRuntimeSpec
   end
     
   it "has a default runtime (which exists)" do

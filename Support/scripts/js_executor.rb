@@ -4,13 +4,13 @@ module JSLINT
   
   module RuntimeSpecs
     
-    DEFAULT_JSC = {
+    JSC = {
       :js_runtime_path => "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc",
       :arguments_separator => '--'
     }
 
     RHINO = {
-      :js_runtime_path => "/usr/local/bin/rhino",
+      :js_runtime_path => `which rhino`.strip!,
       :arguments_separator => ''
     }
     
@@ -20,7 +20,7 @@ module JSLINT
     
     attr_reader :runtime, :arguments_separator
     
-    def initialize options = RuntimeSpecs::DEFAULT_JSC
+    def initialize options = RuntimeSpecs::JSC
       @runtime = options[:js_runtime_path]
       @arguments_separator = options[:arguments_separator]
     end
