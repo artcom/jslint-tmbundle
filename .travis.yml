@@ -6,3 +6,6 @@ script: "rake js_runtime=rhino"
 before_install:
   - sudo apt-get update
   - sudo apt-get install rhino
+notifications:
+  email:
+    - andreas.marr@artcom.de
