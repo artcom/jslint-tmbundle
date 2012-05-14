@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Jslint-tmbundle by artcom</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Jslint-tmbundle</h1>
+        <p>A JSLint TextMate Bundle</p>
+        <p class="view"><a href="https://github.com/artcom/jslint-tmbundle">View the Project on GitHub <small>artcom/jslint-tmbundle</small></a></p>
+        <ul>
+          <li><a href="https://github.com/artcom/jslint-tmbundle/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/artcom/jslint-tmbundle/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/artcom/jslint-tmbundle">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>JSLint TextMate Bundle</h1>
+
+<p>Another <a href="https://github.com/douglascrockford/JSLint">JSLint</a> Bundle for <a href="http://macromates.com/">TextMate</a>.</p>
+
+<p><a href="http://travis-ci.org/#!/artcom/jslint-tmbundle"><img src="https://secure.travis-ci.org/artcom/jslint-tmbundle.png?branch=master" alt="Build Status"></a></p>
+
+<h2>Why?</h2>
+
+<p>There are many JSLint Bundles out there which may be prettier but they all lack functionality.
+Most Bundles only report on errors on lines and thats it.
+This bundle takes advantage of the full returned data by JSLint, incl. listed globals and more.
+It also has <code>.jslintrc</code> support which makes it compatible with the <a href="https://github.com/hallettj/jslint.vim.git">jslint.vim</a> vim-plugin.
+This is important for teams working on stuff.</p>
+
+<p>Example Session:</p>
+
+<p><img src="https://github.com/artcom/jslint-tmbundle/raw/master/Support/images/screenshots/errors.png" alt="Example Session"></p>
+
+<h2>Features</h2>
+
+<ul>
+<li><p>Allows jslinting saved files with Crockford's JSLint.</p></li>
+<li><p>Activate by using <code>CTRL+ALT+C</code></p></li>
+<li><p><code>.jslintrc</code>-support</p></li>
+<li>
+<p>Also generates reports on full data returned by JsLint</p>
+
+<p><img src="https://github.com/artcom/jslint-tmbundle/raw/master/Support/images/screenshots/functions.png" alt="Functions"></p>
+</li>
+</ul><h2>Installation</h2>
+
+<p>Install by cloning:</p>
+
+<pre><code>$ cd ~/Library/Application\ Support/TextMate/Bundles/
+$ git clone git://github.com/artcom/jslint-tmbundle.git JSLINT.tmbundle
+$ osascript -e 'tell app "TextMate" to reload bundles'
+</code></pre>
+
+<p>or cloning somewhere else and symlinking it there.</p>
+
+<h2>TextMate &amp; rvm</h2>
+
+<p>It is possible to create an environment for rvm in textmate by following the
+instructions on <a href="https://rvm.io/integration/textmate/">rvm homepage</a>.</p>
+
+<p>The TM_RUBY will then be used automatically by the bundle. Otherwise the 
+system ruby will be used.</p>
+
+<h2>Syntax highlighting support</h2>
+
+<p>The gem <a href="https://github.com/rubychan/coderay">coderay</a> can be used (optionally) to highlight code.</p>
+
+<p><img src="https://github.com/artcom/jslint-tmbundle/raw/master/Support/images/screenshots/source.png" alt="Highlighted Source"></p>
+
+<h2>.jslintrc support</h2>
+
+<p>This bundle supports using '~/.jslintrc'. Recommended Settings:</p>
+
+<pre><code>/*jslint infixin: true, nomen:true, sloppy: true, vars: true, white: true, forin: true, plusplus: true, continue: true, bitwise: true */
+</code></pre>
+
+<p><img src="https://github.com/artcom/jslint-tmbundle/raw/master/Support/images/screenshots/settings.png" alt="Settings"></p>
+
+<h2>References &amp; Attributions</h2>
+
+<ul>
+<li>
+<p>This bundle uses a <a href="https://github.com/artcom/JSLint">fork</a> of jslint.</p>
+
+<p><em>Note</em>: <code>infixin</code> is a custom setting disabling the 'in' operator checks.</p>
+</li>
+<li><p>Uses Jquery and Jquery-ui</p></li>
+<li><p>Uses <a href="http://www.famfamfam.com/lab/icons/silk/">Silk Icon Set</a> 1.3</p></li>
+<li><p>Uses <a href="http://craigsworks.com/projects/qtip/">qtip</a></p></li>
+</ul><h2>Development setup</h2>
+
+<p>The bundle uses <a href="http://rspec.info/">rspec</a> and <a href="https://github.com/guard/guard">guard</a> for development. The required gems can be
+installed by <a href="http://gembundler.com/">bundler</a> with the supplied Gemfile.</p>
+
+<hr><p><em>Copyright (c) <a href="http://www.artcom.de/">ART+COM AG</a>, Berlin Germany 2012 - Author: Andreas Marr (<a href="mailto:andreas.marr@artcom.de">andreas.marr@artcom.de</a>)</em></p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/artcom">artcom</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    
+  </body>
+</html>
