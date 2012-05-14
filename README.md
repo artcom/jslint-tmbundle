@@ -2,7 +2,7 @@
 
 Another [JSLint] Bundle for [TextMate].
 
-[![Build Status](https://secure.travis-ci.org/monolar/jslint-tmbundle.png?branch=master)](http://travis-ci.org/monolar/jslint-tmbundle)
+[![Build Status](https://secure.travis-ci.org/artcom/jslint-tmbundle.png?branch=master)](http://travis-ci.org/#!/artcom/jslint-tmbundle)
 
 ## Why?
 
