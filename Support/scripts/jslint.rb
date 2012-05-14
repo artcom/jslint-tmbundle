@@ -22,12 +22,12 @@ class JsLint
   JSLINT_RUNNER = "#{ENV['TM_BUNDLE_SUPPORT']}/javascripts/run_jslint.js"
   JSLINT_RC     = "~/.jslintrc"
   
-  def initialize filePath=nil, rc_file=JSLINT_RC
+  def initialize filePath=nil, rc_file=JSLINT_RC, js_runtime_spec=JSLINT::RuntimeSpecs::JSC
     @javascript = nil
     @file_path = filePath || ENV['TM_FILEPATH']
     @selection = ENV['TM_SELECTED_TEXT']
     @jslint_result = nil
-    @executor = JSLINT::JSExecutor.new
+    @executor = JSLINT::JSExecutor.new js_runtime_spec
     @jslintrc_path = rc_file
     @jslintrc = nil
     @parsed_jslintrc = nil
