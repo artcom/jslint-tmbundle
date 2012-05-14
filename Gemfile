@@ -1,10 +1,12 @@
 source 'https://rubygems.org'
 
-group :development do
+group :test do
+  gem 'rake'
   gem 'rspec'
   gem 'rspec-mocks'
   gem 'guard'
   gem 'guard-rspec'
+  #gem 'execjs'
 end
 
 group :bundle do
