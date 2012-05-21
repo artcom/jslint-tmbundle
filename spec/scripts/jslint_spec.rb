@@ -30,5 +30,22 @@ describe "JsLint" do
     myJsLint.jslint_result["result"].should be_false
     myJsLint.jslint_result['data']['errors'].should have(5).items
   end
+  
+  it "can evaluate options from a jslintrc" do
+    # First an invalid javascript that can be made to pass with an
+    # appropriate jslint option
+    myJsLint = JsLint.new "#{RSpec.configuration.fixtures}/fixable.js",
+                          ".jslintrc",
+                          @runtimeSpec
+    myJsLint.jslint_result["result"].should be_false
+    myJsLint.jslint_result['data']['errors'].should have(1).item
+    
+    # Use jslintrc with option to suppress the reported error
+    myJsLint = JsLint.new "#{RSpec.configuration.fixtures}/fixable.js",
+                          "#{RSpec.configuration.fixtures}/jslintrc",
+                          @runtimeSpec
+    myJsLint.jslint_result["result"].should be_true
+    myJsLint.jslint_result['data']['errors'].should be_nil
+  end
 
 end
