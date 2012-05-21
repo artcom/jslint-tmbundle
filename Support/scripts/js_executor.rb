@@ -48,7 +48,7 @@ CMD
       def prepare_options options
         options.map { |option|
           option = option.to_json if option.kind_of? Hash
-          "\"#{option.to_s.gsub('"', '\"').gsub('$', '\$').gsub('`', '\\\`')}\""
+          "\"#{option.to_s.gsub('\\','\\\\\\\\').gsub('"', '\"').gsub('$', '\$').gsub('`', '\\\`')}\""
         }.join(" ")
       end
   end

@@ -64,4 +64,18 @@ describe "JSExecutor" do
     @jsexecutor.send(:prepare_options, myOptions).should eq('"var foo = \"bar\";" "2" "{\"foo\":\"bar\"}"')
   end
 
+  # This is an indication i should really run the js differently and not via command line.
+  # maybe do have a look at therubyracer or execjs... Problem is this texmate bundle should
+  # not have mandatory gem dependencies
+  it "can properly escapce escaped backslash characters" do
+    result = @jsexecutor.execute "#{RSpec.configuration.fixtures}/backslash.js"
+    result[:response].should eq("\\")
+    result[:error].should eq("")
+    
+    result = @jsexecutor.execute "#{RSpec.configuration.fixtures}/echo.js",
+                                  ['\\']
+    result[:response].should eq("\\")
+    result[:error].should eq("")
+  end
+
 end
