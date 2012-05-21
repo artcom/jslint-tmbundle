@@ -20,6 +20,7 @@ class JsLint
   attr_reader :javascript, :file, :selection, :jslint_result
   
   JSLINT_RUNNER = "#{ENV['TM_BUNDLE_SUPPORT']}/javascripts/run_jslint.js"
+  JSLINTRC_RUNNER = "#{ENV['TM_BUNDLE_SUPPORT']}/javascripts/jslintrc.js"
   JSLINT_RC     = "~/.jslintrc"
   
   def initialize filePath=nil, rc_file=JSLINT_RC, js_runtime_spec=JSLINT::RuntimeSpecs::JSC
@@ -43,15 +44,24 @@ class JsLint
       @jslintrc = File.read File.expand_path(@jslintrc_path)
       @parsed_jslintrc = {}
       
-      # The following does not feel nice.
-      # Yes, i could simply prepend the jslintrc to the javascript
-      # But this would shift the linenumbers and i could not report the settings
-      # being used to perform the jslinting step
-      @jslintrc[9..@jslintrc.size-4].split(",").each { |option|
-        parts = option.split(":")
-        @parsed_jslintrc[parts[0].strip] = parts[1].strip
-      }
-    end
+      jslintrc_result = JSON::parse(@executor.execute(JSLINTRC_RUNNER, [@jslintrc])[:response])
+      if jslintrc_result['comments']
+        jslintrc_result['comments'].each do |comment|
+          Logger.trace "jslintrc: encountered comment '#{comment['value'].strip}'"
+          jslint_options =  comment['value'].strip.gsub(/^jslint (.*)$/,"\\1")
+          jslint_options.split(",").each { |option|
+            parts = option.split(":")
+            # Potentially overwrite already defined options - that is fine!
+            @parsed_jslintrc[parts[0].strip] = parts[1].strip
+            }
+          end
+        end
+        Logger.trace("jslint using comment line as '#{@parsed_jslintrc}'")
+      end
+  rescue Exception => e
+    Logger.error("An error occured while parsing jslintrc:: <br/>'#{e}' <br/>#{e.backtrace.join('<br/>')}")
+    Logger.trace("continuing with empty jslintrc options...")
+    @parsed_jslintrc = {}
   end
   
   def load_javascript
@@ -66,7 +76,7 @@ class JsLint
     @jslint_result = JSON::parse(result[:response])
     Logger.trace("Json Jslinting result: \n'#{PP.pp(@jslint_result, "", 79)}'")
   rescue Exception => e
-    Logger.error("jslint.rb (jslint_full) - An Error Occured while validating:: <br/>'#{e}' <br/>#{e.backtrace.join('<br/>')}");
+    Logger.error("jslint.rb (jslint_full) - An Error Occured while validating:: <br/>'#{e}' <br/>#{e.backtrace.join('<br/>')}")
     Logger.error("command used: #{result[:command]}")
     @jslint_result = nil
   end
