@@ -21,7 +21,7 @@ class ArrayLogger
   end
   
   def trace payload
-    perform_logging :WARN, payload
+    perform_logging :TRACE, payload
   end
   
   def html_dump
