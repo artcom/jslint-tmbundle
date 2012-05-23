@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 $:.unshift File.expand_path("../../Support/scripts", __FILE__)
 
 # Simulate Textmate environment

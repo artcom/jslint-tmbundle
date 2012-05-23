@@ -6,6 +6,7 @@ group :test do
   gem 'rspec-mocks'
   gem 'guard'
   gem 'guard-rspec'
+  gem 'simplecov'
   #gem 'execjs'
 end
 
