@@ -1,5 +1,5 @@
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start if ENV["COVERAGE"]
 
 $:.unshift File.expand_path("../../Support/scripts", __FILE__)
 
