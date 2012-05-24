@@ -47,5 +47,10 @@ describe "JsLint" do
     myJsLint.jslint_result["result"].should be_true
     myJsLint.jslint_result['data']['errors'].should be_nil
   end
+  
+  it "can render the result via a template" do
+    myJsLint = JsLint.new "#{RSpec.configuration.fixtures}/valid_min.js", ".jslintrc", @runtimeSpec
+    myJsLint.to_html.should be_a_kind_of String
+  end
 
 end

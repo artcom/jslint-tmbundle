@@ -31,4 +31,15 @@ describe "ArrayLogger" do
     }.should eq(LEVELS.map{ |level| level.upcase.to_sym})
   end
   
+  it "emits html" do
+    testingRegexp = /^<code class="logger_INFO">([\d\s:+-]*) \[(.*)\] - (\w*)<\/code><br\/>$/
+    @logger.info "TEST"
+    myHtml = @logger.html_dump
+    myHtml.should match(testingRegexp)
+    myMatches = myHtml.match(testingRegexp)
+    myMatches[1].should eq("#{@logger.log.first.time}")
+    myMatches[2].should eq("#{@logger.log.first.level}")
+    myMatches[3].should eq("#{@logger.log.first.payload}")
+  end
+  
 end
