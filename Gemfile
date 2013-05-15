@@ -6,8 +6,8 @@ group :test do
   gem 'rspec-mocks'
   gem 'guard'
   gem 'guard-rspec'
-  gem 'simplecov'
-  #gem 'execjs'
+  gem 'coveralls', require: false
+  gem 'json', '~> 1.7.7'
 end
 
 group :bundle do
