@@ -4,6 +4,8 @@ Another [JSLint] Bundle for [TextMate].
 
 [![Build Status](https://secure.travis-ci.org/artcom/jslint-tmbundle.png?branch=master)](http://travis-ci.org/artcom/jslint-tmbundle)
 
+[![Coverage Status](https://coveralls.io/repos/artcom/jslint-tmbundle/badge.png?branch=master)](https://coveralls.io/r/artcom/jslint-tmbundle?branch=master)
+
 ## Why?
 
 There are many JSLint Bundles out there which may be prettier but they all lack functionality.
